@@ -77,8 +77,8 @@
 			children = (
 				DD8AFB9822FF94B7005AFD25 /* AppDelegate.swift */,
 				DD8AFB9A22FF94B7005AFD25 /* MainViewController.swift */,
-				DD8AFB9C22FF94B7005AFD25 /* Main.storyboard */,
 				DD8AFBAA22FFA9B2005AFD25 /* NewsViewController.swift */,
+				DD8AFB9C22FF94B7005AFD25 /* Main.storyboard */,
 				DD8AFB9F22FF94BA005AFD25 /* Assets.xcassets */,
 				DD8AFBA122FF94BA005AFD25 /* LaunchScreen.storyboard */,
 				DD8AFBA422FF94BA005AFD25 /* Info.plist */,
@@ -360,7 +360,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7Y284RH96R;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = NewsScrollApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -379,7 +379,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7Y284RH96R;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = NewsScrollApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

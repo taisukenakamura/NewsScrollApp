@@ -9,14 +9,19 @@
 import UIKit
 import XLPagerTabStrip
 import WebKit
+import NVActivityIndicatorView
 
-class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDataSource, UITableViewDelegate, WKNavigationDelegate, XMLParserDelegate{
+class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDataSource, UITableViewDelegate, WKNavigationDelegate, XMLParserDelegate {
 
     // 引っ張って更新
     var refreshControl: UIRefreshControl!
 
     // テーブルビューのインスタンスを取得
     var tableView: UITableView = UITableView()
+    // インジケーターの取得
+    var indicatorBackgroundView: UIView!
+    
+    var indicator: UIActivityIndicatorView!
 
     // XMLParserのインスタンスを取得
     var parser = XMLParser()
@@ -31,6 +36,9 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
     var titleString: String = ""
     // XMLファイルのリンク情報
     var linkString: String = ""
+    
+    var activityIndicatorView: NVActivityIndicatorView!
+    
 
 
     // webview
@@ -53,10 +61,10 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         // デリゲートとの接続
         tableView.delegate = self
         tableView.dataSource = self
-
+       
         // navigationDelegateとの接続
         webView.navigationDelegate = self
-
+ 
         // tableviewのサイズを確定
         tableView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
 
@@ -65,12 +73,19 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
 
         // refreshControlをテーブルビューにつける
         tableView.addSubview(refreshControl)
+      
+        activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 60, height: 60), type: NVActivityIndicatorType.lineSpinFadeLoader, color: UIColor.gray, padding: 0)
+        activityIndicatorView.center = CGPoint(x: self.view.center.x, y: self.view.center.y - 50) // 位置を中心に設定
+        view.addSubview(activityIndicatorView)
+       
 
         // 最初は隠す（tableviewが表示されるのを邪魔しないように）
         webView.isHidden = true
         toolBar.isHidden = true
 
         parseUrl()
+        
+        
     }
 
     @objc func refresh() {
@@ -83,6 +98,33 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         // refreshControlを終了
         refreshControl.endRefreshing()
     }
+    
+    func showLoadIndicator() {
+        
+        indicatorBackgroundView = UIView(frame: self.view.bounds)
+        indicatorBackgroundView?.backgroundColor = UIColor.black
+        indicatorBackgroundView?.alpha = 0.4
+        indicatorBackgroundView?.tag = 100100
+        
+        indicatorBackgroundView?.addSubview(activityIndicatorView)
+        self.view.addSubview(indicatorBackgroundView!)
+
+        activityIndicatorView.startAnimating()
+   
+    }
+    
+    
+    func stopLoadIndicator() {
+        
+        if let viewWithTag = self.view.viewWithTag(100100) {
+            viewWithTag.removeFromSuperview()
+        }
+        
+        activityIndicatorView.stopAnimating()
+        
+    }
+    
+    
 
     // urlを解析する
     func parseUrl() {
@@ -184,6 +226,11 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         let urlRequest = NSURLRequest(url: url)
         // ここでロード
         webView.load(urlRequest as URLRequest)
+        
+        showLoadIndicator()
+        
+        self.tableView.allowsSelection = false
+        
     }
 
     // ページの読み込み完了時に呼ばれる
@@ -194,6 +241,10 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         toolBar.isHidden = false
         // webviewを表示する
         webView.isHidden = false
+        
+        stopLoadIndicator()
+        
+         self.tableView.allowsSelection = true
     }
 
     // キャンセル
