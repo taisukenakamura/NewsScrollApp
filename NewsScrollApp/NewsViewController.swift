@@ -18,11 +18,6 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
 
     // テーブルビューのインスタンスを取得
     var tableView: UITableView = UITableView()
-    // インジケーターの取得
-    var indicatorBackgroundView: UIView!
-    
-    var indicator: UIActivityIndicatorView!
-
     // XMLParserのインスタンスを取得
     var parser = XMLParser()
 
@@ -36,9 +31,10 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
     var titleString: String = ""
     // XMLファイルのリンク情報
     var linkString: String = ""
-    
+    // インジケータを変数定義
     var activityIndicatorView: NVActivityIndicatorView!
-    
+    // インジケーター背景の変数定義
+    var indicatorBackgroundView: UIView!
 
 
     // webview
@@ -73,9 +69,10 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
 
         // refreshControlをテーブルビューにつける
         tableView.addSubview(refreshControl)
-      
-        activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 60, height: 60), type: NVActivityIndicatorType.lineSpinFadeLoader, color: UIColor.gray, padding: 0)
-        activityIndicatorView.center = CGPoint(x: self.view.center.x, y: self.view.center.y - 50) // 位置を中心に設定
+        // インジケータのサイズ
+        activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 60, height: 60), type: NVActivityIndicatorType.audioEqualizer, color: UIColor.gray, padding: 0)
+        // 位置を中心に配置
+        activityIndicatorView.center = CGPoint(x: self.view.center.x, y: self.view.center.y - 50)
         view.addSubview(activityIndicatorView)
        
 
@@ -98,28 +95,28 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         // refreshControlを終了
         refreshControl.endRefreshing()
     }
-    
+    // インジケータを表示する
     func showLoadIndicator() {
-        
+        // インジケータが表示された時の背景
         indicatorBackgroundView = UIView(frame: self.view.bounds)
         indicatorBackgroundView?.backgroundColor = UIColor.black
         indicatorBackgroundView?.alpha = 0.4
         indicatorBackgroundView?.tag = 100100
-        
+        // インジケータと背景を接続
         indicatorBackgroundView?.addSubview(activityIndicatorView)
         self.view.addSubview(indicatorBackgroundView!)
-
+        //起動
         activityIndicatorView.startAnimating()
    
     }
     
-    
+    // インジケータを非表示にする
     func stopLoadIndicator() {
-        
+        // インジケータを消すか判断
         if let viewWithTag = self.view.viewWithTag(100100) {
             viewWithTag.removeFromSuperview()
         }
-        
+        // 消滅
         activityIndicatorView.stopAnimating()
         
     }
@@ -183,7 +180,7 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
             articles.append(elements)
         }
     }
-
+//   セルの操作 ------------------------------------------------------------------------------------------------------
     // セルの高さ
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
@@ -226,9 +223,9 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         let urlRequest = NSURLRequest(url: url)
         // ここでロード
         webView.load(urlRequest as URLRequest)
-        
+        // セルをタップした時にインジケータを表示
         showLoadIndicator()
-        
+        // セルを押した後、他のセルを押せなくする
         self.tableView.allowsSelection = false
         
     }
@@ -241,10 +238,10 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         toolBar.isHidden = false
         // webviewを表示する
         webView.isHidden = false
-        
+        // インジケータを非表示にする
         stopLoadIndicator()
-        
-         self.tableView.allowsSelection = true
+        // セルを再び押せるようにする
+        self.tableView.allowsSelection = true
     }
 
     // キャンセル
