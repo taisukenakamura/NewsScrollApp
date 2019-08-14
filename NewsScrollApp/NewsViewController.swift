@@ -82,14 +82,11 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
 
         parseUrl()
         
-        
     }
-
     @objc func refresh() {
         // 2秒後にdelayを呼ぶ
         perform(#selector(delay), with: nil, afterDelay: 2.0)
     }
-
     @objc func delay() {
         parseUrl()
         // refreshControlを終了
@@ -101,28 +98,22 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
         indicatorBackgroundView = UIView(frame: self.view.bounds)
         indicatorBackgroundView?.backgroundColor = UIColor.black
         indicatorBackgroundView?.alpha = 0.4
-        indicatorBackgroundView?.tag = 100100
+        indicatorBackgroundView?.tag = 1
         // インジケータと背景を接続
         indicatorBackgroundView?.addSubview(activityIndicatorView)
         self.view.addSubview(indicatorBackgroundView!)
         //起動
         activityIndicatorView.startAnimating()
-   
     }
-    
     // インジケータを非表示にする
     func stopLoadIndicator() {
         // インジケータを消すか判断
-        if let viewWithTag = self.view.viewWithTag(100100) {
+        if let viewWithTag = self.view.viewWithTag(1) {
             viewWithTag.removeFromSuperview()
         }
         // 消滅
         activityIndicatorView.stopAnimating()
-        
     }
-    
-    
-
     // urlを解析する
     func parseUrl() {
         // url型に変換
@@ -151,7 +142,6 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
             linkString = ""
         }
     }
-
     // 開始タグと終了タグでくくられたデータがあったときに実行されるメソッド
     func parser(_ parser: XMLParser, foundCharacters string: String) {
 
@@ -161,7 +151,6 @@ class NewsViewController: UIViewController, IndicatorInfoProvider, UITableViewDa
             linkString.append(string)
         }
     }
-
     // 終了タグを見つけた時
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         // アイテムという要素の中にあるなら、
